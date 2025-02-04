@@ -118,17 +118,6 @@ jobs:
          git clone https://github.com/TanakaLun/AnyKernel3 --depth=1
          rm -rf ./AnyKernel3/.git
          cp kernel_workspace/kernel_platform/out/msm-${{ github.event.inputs.CPUD }}-${{ github.event.inputs.CPUD }}-gki/dist/Image ./AnyKernel3/
-
-      - name: Download latest susfs4ksu module
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          LATEST_URL=$(curl -sSLH "Authorization: Bearer $GH_TOKEN" \
-            https://api.github.com/repos/sidex15/susfs4ksu-module/releases/latest \
-            | jq -r '.assets[] | select(.name | test("ksu_module_susfs_1.5.2\\+.*\\.zip")) | .browser_download_url')
-          curl -LO "$LATEST_URL"
-          echo "Downloaded file: $(ls ksu_module_susfs_1.5.2+*.zip)"         
-          mv ksu_module_susfs_1.5.2+.zip ./AnyKernel3/
           
       - name: Upload AnyKernel3
         uses: actions/upload-artifact@v4
