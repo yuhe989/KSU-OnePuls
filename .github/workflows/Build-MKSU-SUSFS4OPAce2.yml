@@ -90,7 +90,7 @@ jobs:
            git clone https://github.com/TanakaLun/kernel_patches4mksu.git
            curl -O https://github.com/TanakaLun/kernel_patches4mksu/blob/main/SUSFS-v1.5.5.patch
            cd kernel_platform
-           cp ../SUSFS-v1.5.5.patch ./KernelSU/
+           cp ../susfs4ksu/kernel_patches/KernelSU/10_enable_susfs_for_ksu.patch ./KernelSU/
            cp ../kernel_patches4mksu/mksu_susfs.patch ./KernelSU/           
            cp ../SUSFS-v1.5.5.patch ./common/
            cp ../susfs4ksu/kernel_patches/fs/* ./common/fs/
