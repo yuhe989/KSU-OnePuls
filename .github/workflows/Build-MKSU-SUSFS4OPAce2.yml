@@ -22,6 +22,11 @@ on:
         description: "内核版本"
         required: true
         default: '5.10'
+      SUSFS_DOWNLOAD:
+        description: "添加 SUSFS 模块"
+        required: true
+        type: boolean
+        default: false        
 
 jobs:
   build:
@@ -120,6 +125,7 @@ jobs:
          cp kernel_workspace/kernel_platform/out/msm-${{ github.event.inputs.CPUD }}-${{ github.event.inputs.CPUD }}-gki/dist/Image ./AnyKernel3/
 
       - name: Download Latest SUSFS Module
+        if: github.event.inputs.SUSFS_ENABLED == 'true'
         env:
           GH_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}  # 引用自定义 Secret
         run: |
