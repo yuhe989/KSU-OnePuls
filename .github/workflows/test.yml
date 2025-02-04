@@ -1,0 +1,33 @@
+jobs:
+  download:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download Latest Release
+        env:
+          GH_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
+        run: |
+          # 获取最新版本的下载链接
+          LATEST_URL=$(curl -sSLH "Authorization: Bearer $GH_TOKEN" \
+            https://api.github.com/repos/sidex15/susfs4ksu-module/releases/latest \
+            | jq -r '.assets[] | select(.name | test("ksu_module_susfs_1.5.2\\+.*\\.zip")) | .browser_download_url')
+
+          # 下载文件并保留远程文件名
+          curl -LO "$LATEST_URL"
+
+          # 获取下载的文件名
+          DOWNLOADED_FILE=$(basename "$LATEST_URL")
+
+          # 检查文件是否存在
+          if [ ! -f "$DOWNLOADED_FILE" ]; then
+            echo "Error: File not downloaded!"
+            exit 1
+          fi
+
+          # 输出文件名
+          echo "Downloaded file: $DOWNLOADED_FILE"
+
+          # 解压文件
+          unzip "$DOWNLOADED_FILE" -d susfs-module
