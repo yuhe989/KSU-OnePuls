@@ -119,7 +119,7 @@ jobs:
          rm -rf ./AnyKernel3/.git
          cp kernel_workspace/kernel_platform/out/msm-${{ github.event.inputs.CPUD }}-${{ github.event.inputs.CPUD }}-gki/dist/Image ./AnyKernel3/
 
-      - name: Download Latest Release
+      - name: Download Latest SUSFS Module
         env:
           GH_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}  # 引用自定义 Secret
         run: |
