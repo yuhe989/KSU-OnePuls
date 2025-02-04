@@ -98,10 +98,9 @@ jobs:
            cd kernel_workspace
            git clone https://gitlab.com/simonpunk/susfs4ksu.git -b gki-${{ github.event.inputs.ANDROID_VERSION }}-${{ github.event.inputs.KERNEL_VERSION }}
            git clone https://github.com/TheWildJames/kernel_patches.git
-           curl -O https://github.com/TanakaLun/kernel_patches4mksu/blob/main/SUSFS-v1.5.5.patch
            cd kernel_platform
            cp ../susfs4ksu/kernel_patches/KernelSU/10_enable_susfs_for_ksu.patch ./KernelSU-Next/
-           cp ../SUSFS-v1.5.5.patch ./common/
+           cp ../kernel_patches/Implement-SUSFS-v1.5.4-for-KernelSU-Next.patch ./common/
            cp ../susfs4ksu/kernel_patches/fs/* ./common/fs/
            cp ../susfs4ksu/kernel_patches/include/linux/* ./common/include/linux/
 
@@ -109,7 +108,7 @@ jobs:
            cd ./KernelSU-Next
            patch -p1 --forward < 10_enable_susfs_for_ksu.patch || true
            cd ../common
-           patch -p1 < SUSFS-v1.5.5.patch || true
+           patch -p1 < Implement-SUSFS-v1.5.4-for-KernelSU-Next.patch || true
            cp ../../kernel_patches/69_hide_stuff.patch ./
            patch -p1 -F 3 < 69_hide_stuff.patch
            git add -A && git commit -a -m "BUILD Kernel"
