@@ -98,6 +98,7 @@ jobs:
            cd kernel_workspace
            git clone https://gitlab.com/simonpunk/susfs4ksu.git -b gki-${{ github.event.inputs.ANDROID_VERSION }}-${{ github.event.inputs.KERNEL_VERSION }}
            git clone https://github.com/TheWildJames/kernel_patches.git
+           curl -O https://github.com/TanakaLun/kernel_patches4mksu/blob/main/SUSFS-v1.5.5.patch
            cd kernel_platform
            cp ../susfs4ksu/kernel_patches/KernelSU/10_enable_susfs_for_ksu.patch ./KernelSU-Next/
            cp ../SUSFS-v1.5.5.patch ./common/
