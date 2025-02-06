@@ -129,14 +129,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}  # 引用自定义 Secret
         run: |
-          LATEST_URL=$(curl -sSLH "Authorization: Bearer $GH_TOKEN" \
-            https://api.github.com/repos/sidex15/susfs4ksu-module/releases/latest \
-            | jq -r '.assets[] | select(.name | test("ksu_module_susfs_1.5.2\\+.*\\.zip")) | .browser_download_url')
-          curl -LO "$LATEST_URL"
-          if [ ! -f *.zip ]; then
-            echo "Error: File not downloaded!"
-            exit 1
-          fi
+          wget https://github.com/sidex15/ksu_module_susfs/releases/latest/download/ksu_module_susfs_1.5.2+.zip
           mv ksu_module_susfs_1.5.2+.zip ./AnyKernel3/
           
       - name: Upload AnyKernel3
