@@ -125,12 +125,8 @@ jobs:
          cp kernel_workspace/kernel_platform/out/msm-${{ github.event.inputs.CPUD }}-${{ github.event.inputs.CPUD }}-gki/dist/Image ./AnyKernel3/
 
       - name: Download Latest SUSFS Module
-        if: github.event.inputs.SUSFS_ENABLED == 'true'
-        env:
-          GH_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}  # 引用自定义 Secret
-        run: |
-          wget https://github.com/sidex15/ksu_module_susfs/releases/latest/download/ksu_module_susfs_1.5.2+.zip
-          mv ksu_module_susfs_1.5.2+.zip ./AnyKernel3/
+        wget https://github.com/sidex15/ksu_module_susfs/releases/latest/download/ksu_module_susfs_1.5.2+.zip
+         cp ksu_module_susfs_1.5.2+.zip ./AnyKernel3/
           
       - name: Upload AnyKernel3
         uses: actions/upload-artifact@v4
