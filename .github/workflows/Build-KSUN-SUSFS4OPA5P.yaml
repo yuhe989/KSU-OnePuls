@@ -26,11 +26,15 @@ on:
         description: "内核版本"
         required: true
         default: '6.6'
+      TYPE:
+        description: "构建类型"
+        required: true
+        default: 'perf'
       SUSFS_DOWNLOAD:
         description: "添加 SUSFS 模块"
         required: true
         type: boolean
-        default: false        
+        default: true        
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -112,7 +116,7 @@ jobs:
         run: |
          cd kernel_workspace
          export LTO=thin
-         ./kernel_platform/oplus/build/oplus_build_kernel.sh ${{ github.event.inputs.CPUD }} perf
+         ./kernel_platform/oplus/build/oplus_build_kernel.sh ${{ github.event.inputs.CPUD }} ${{ github.event.inputs.TYPE }}
          
       - name: Make AnyKernel3
         run: |
