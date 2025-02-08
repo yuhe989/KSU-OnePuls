@@ -116,6 +116,8 @@ jobs:
       - name: Build kernel
         run: |
          cd kernel_workspace
+         grep -rnw . -e 'pts_unix98_lookup_kp'
+         find . -type f -exec sed -i '/pts_unix98_lookup_kp/s/^/#/' {} +
          ./kernel_platform/oplus/build/oplus_build_kernel.sh ${{ github.event.inputs.CPUD }} gki
          
       - name: Make AnyKernel3
