@@ -31,11 +31,6 @@ jobs:
         run: |
          sudo apt update && sudo apt upgrade -y
          sudo apt install -y python3 git curl ccache
-         
-      - name: Setup ccache
-        uses: hendrikmuhs/ccache-action@v1.2
-        with:
-          max-size: 2G
           
       - name: Install repo tool
         run: |
@@ -43,7 +38,7 @@ jobs:
          chmod a+x ~/repo
          sudo mv ~/repo /usr/local/bin/repo
 
-      - name: Initialize repo and sync
+      - name: Initialize repo 和 sync
         run: |
          mkdir kernel_workspace && cd kernel_workspace
          repo init -u https://github.com/OnePlusOSS/kernel_manifest.git -b refs/heads/oneplus/sm8650 -m oneplus_ace5.xml --depth=1
@@ -92,8 +87,11 @@ jobs:
         run: |
          cd kernel_workspace
          export LTO=thin
-         ./kernel_platform/oplus/build/oplus_build_kernel.sh pineapple gki
-         
+         #./kernel_platform/oplus/build/oplus_build_kernel.sh pineapple gki
+         ./kernel_platform/build_with_bazel.py \
+            -t pineapple \
+            gki \
+            
       - name: Make AnyKernel3
         run: |
          git clone https://github.com/TanakaLun/AnyKernel3 --depth=1
