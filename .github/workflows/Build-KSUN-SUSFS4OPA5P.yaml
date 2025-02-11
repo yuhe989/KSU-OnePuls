@@ -1,11 +1,11 @@
-name: Build Kernel Next-SUSFS For 1+A5P
+name: Build Kernel Next-SUSFS For 1+13
 on:
   workflow_dispatch:
     inputs:
       Branches:
         description: "内核分支"
         required: true
-        default: '543069760'    
+        default: 'cabagekiller'    
       CPU:
         description: "处理器分支"
         required: true
@@ -13,7 +13,7 @@ on:
       FEIL:
         description: "配置文件"
         required: true
-        default: 'oneplus_ace_5_pro_v'
+        default: 'oneplus13_v'
       CPUD:
         description: "处理器代号"
         required: true
@@ -116,8 +116,10 @@ jobs:
         run: |
          cd kernel_workspace
          export LTO=thin
-         ./kernel_platform/oplus/build/oplus_build_kernel.sh ${{ github.event.inputs.CPUD }} ${{ github.event.inputs.TYPE }}
-         
+         ./kernel_platform/build_with_bazel.py \
+            -t sun \
+            gki \
+            
       - name: Make AnyKernel3
         run: |
          git clone https://github.com/TanakaLun/AnyKernel3 --depth=1
