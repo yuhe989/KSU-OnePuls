@@ -5,7 +5,7 @@ on:
       FEIL:
         description: "配置文件"
         required: true
-        default: 'oneplus_ac3_pro_v'  
+        default: 'oneplus_ace3_pro_v'  
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -37,7 +37,7 @@ jobs:
          chmod a+x ~/repo
          sudo mv ~/repo /usr/local/bin/repo
 
-      - name: Initialize repo and sync
+      - name: Initialize repo 和 sync
         run: |
          mkdir kernel_workspace && cd kernel_workspace
          repo init -u https://github.com/OnePlusOS/kernel_manifest.git -b refs/heads/oneplus/sm8650 -m ${{ github.event.inputs.FEIL }}.xml --depth=1
