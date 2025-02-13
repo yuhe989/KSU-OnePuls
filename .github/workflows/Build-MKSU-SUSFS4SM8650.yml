@@ -14,9 +14,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     env:
-  RELEASE_NAME: "*TEST BUILD* OnePlus Kernels With MKSU & SUSFS For SM8650*TEST BUILD*"
+      RELEASE_NAME: "*TEST BUILD* OnePlus Kernels With MKSU & SUSFS For SM8650*TEST BUILD*"
   
     steps:
       - name: Maximize build space
@@ -139,8 +138,8 @@ jobs:
          path: ./AnyKernel3/*
           
       - name: Upload Release
-         run: |
+        run: |
            zip MKSU_${{ github.event.inputs.MODEL }}_${{ env.KSUVER }}.zip -C ./AnyKernel3/*
            gh release upload MKSU_${{ github.event.inputs.FEIL }}_${{ env.KSUVER }}.zip
-         env:
+        env:
            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
