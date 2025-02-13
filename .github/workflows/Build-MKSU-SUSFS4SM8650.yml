@@ -40,7 +40,7 @@ jobs:
           prerelease: true
           name: ${{ env.RELEASE_NAME }}
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
 
       - name: Install dependencies
         run: |
@@ -142,4 +142,4 @@ jobs:
            zip MKSU_${{ github.event.inputs.MODEL }}_${{ env.KSUVER }}.zip -C ./AnyKernel3/*
            gh release upload MKSU_${{ github.event.inputs.FEIL }}_${{ env.KSUVER }}.zip
         env:
-           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+           GITHUB_TOKEN: ${{ secrets.TOKEN }}
