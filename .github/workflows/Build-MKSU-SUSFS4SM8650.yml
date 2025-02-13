@@ -18,7 +18,7 @@ jobs:
 env:
   RELEASE_NAME: "*TEST BUILD* OnePlus Kernels With MKSU & SUSFS For SM8650*TEST BUILD*"
   
-    steps:
+steps:
       - name: Maximize build space
         uses: easimon/maximize-build-space@master
         with:
@@ -61,7 +61,7 @@ env:
 #         repo init -u https://github.com/OnePlusOSS/kernel_manifest.git -b refs/heads/oneplus/sm8650 -m oneplus_ace3_pro_v.xml --depth=1
 #         repo sync
          
-      - name: Initialize repo and sync
+      - name: Initialize repo 和 sync
         run: |
          mkdir kernel_workspace && cd kernel_workspace
          repo init -u https://github.com/OnePlusOSS/kernel_manifest.git -b refs/heads/oneplus/sm8650 -m ${{ github.event.inputs.MODEL }}.xml --depth=1
