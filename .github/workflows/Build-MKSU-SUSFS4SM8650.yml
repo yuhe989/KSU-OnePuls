@@ -60,7 +60,7 @@ jobs:
          # repo init -u https://github.com/OnePlusOSS/kernel_manifest.git -b refs/heads/oneplus/sm8650 -m oneplus_ace3_pro_v.xml --depth=1
          # repo sync
          
-      - name: Initialize repo and sync
+      - name: Initialize repo 和 sync
         run: |
          mkdir kernel_workspace && cd kernel_workspace
          repo init -u https://github.com/OnePlusOSS/kernel_manifest.git -b refs/heads/oneplus/sm8650 -m ${{ github.event.inputs.MODEL }}.xml --depth=1
@@ -134,12 +134,12 @@ jobs:
       - name: Upload AnyKernel3
         uses: actions/upload-artifact@v4
         with:
-         name: MKSU_${{ github.event.inputs.FEIL }}_${{ env.KSUVER }}
+         name: MKSU_${{ github.event.inputs.MODEL }}_${{ env.KSUVER }}
          path: ./AnyKernel3/*
           
       - name: Upload Release
         run: |
-           zip MKSU_${{ github.event.inputs.MODEL }}_${{ env.KSUVER }}.zip -C ./AnyKernel3/*
+           zip MKSU_${{ github.event.inputs.MODEL }}_${{ env.KSUVER }}.zip ./AnyKernel3/*
            gh release upload MKSU_${{ github.event.inputs.FEIL }}_${{ env.KSUVER }}.zip
         env:
            GITHUB_TOKEN: ${{ secrets.TOKEN }}
