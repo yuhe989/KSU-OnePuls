@@ -41,9 +41,7 @@ jobs:
          find common/android/ -name "abi_gki_protected_exports_*" -delete
          find msm-kernel/android/ -name "abi_gki_protected_exports_*" -delete
          sed -i 's/ -dirty//g' common/scripts/setlocalversion
-         sed -i 's/ -dirty//g' msm-kernel/scripts/setlocalversion
          sed -i '$s|echo "\$res"|echo "$res-Mortis"|' common/scripts/setlocalversion            
-         sed -i '$s|echo "\$res"|echo "$res-Mortis"|' msm-kernel/scripts/setlocalversion            
          perl -pi -e 's{UTS_VERSION="\$\(echo \$UTS_VERSION \$CONFIG_FLAGS \$TIMESTAMP \| cut -b -\$UTS_LEN\)"}{UTS_VERSION="#1 SMP PREEMPT Sat Apr 20 07:21:00 UTC 2025"}' common/scripts/mkcompile_h
          
       - name: Set up MKSU
