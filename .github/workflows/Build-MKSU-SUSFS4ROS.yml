@@ -56,7 +56,6 @@ jobs:
       - name: Build kernel
         run: |
          cd kernel_workspace
-         ls
          export LTO=thin 
          ./common/build.config.gki.aarch64 build/build.sh
          
