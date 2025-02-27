@@ -37,8 +37,13 @@ jobs:
       - name: Install dependencies
         run: |
          sudo apt update && sudo apt upgrade -y
-         sudo apt install -y python3 git
-
+         sudo apt install -y python3 git ccache clang
+         
+      - name: Setup ccache
+        uses: hendrikmuhs/ccache-action@v1
+        with:
+          max-size: 2G
+          
       - name: Install repo tool
         run: |
          curl https://storage.googleapis.com/git-repo-downloads/repo > ~/repo
