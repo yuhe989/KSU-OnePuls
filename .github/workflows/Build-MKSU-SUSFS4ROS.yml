@@ -56,8 +56,10 @@ jobs:
       - name: Build kernel
         run: |
          cd kernel_workspace
-         chmod +x common
-         export LTO=thin 
+         ls
+         export LTO=thin
+         ls common
+         ls common/build
          ./common/build/build.sh
          
       - name: Upload files
