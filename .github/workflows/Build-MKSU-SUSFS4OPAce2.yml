@@ -80,7 +80,19 @@ jobs:
            cd ..
            cd ./msm-kernel && git add -A && git commit -a -m "BUILD Kernel"
            cd ..
-           
+
+      - name: Upload makefile
+        uses: actions/upload-artifact@v4
+        with:
+         name: Makefile
+         path: ./kernel_workspace/kernel_platform/common/scripts/Makefile
+
+      - name: Upload sucompat
+        uses: actions/upload-artifact@v4
+        with:
+         name: sucompat
+         path: ./kernel_workspace/kernel_platform/common/drivers/kernelsu/sucompat.c  
+         
       - name: Build kernel
         run: |
          cd kernel_workspace
