@@ -36,7 +36,6 @@ jobs:
             mkbootimg   
 
       - name: Download toolchain (if cache not found)
-        if: steps.cache-toolchain.outputs.cache-hit != 'true'
         run: |
           AOSP_MIRROR=https://android.googlesource.com
           BRANCH=main-kernel-build-2024
