@@ -81,8 +81,14 @@ jobs:
               tools/bazel build --disk_cache=/home/runner/.cache/bazel --config=fast --lto=thin //common:kernel_aarch64_dist 
             fi
          
-      - name: Upload files
+      - name: Make AnyKernel3
+        run: |
+         git clone https://github.com/TanakaLun/AnyKernel3 --depth=1
+         rm -rf ./AnyKernel3/.git
+         cp kernel_workspace/out/android12-5.10/dist/Image ./AnyKernel3/
+
+      - name: Upload AnyKernel3
         uses: actions/upload-artifact@v4
         with:
-         name: OP11R_MKSU_${{ env.KSUVER }}
-         path: ./kernel_workspace/out/android12-5.10/dist/*
+         name: ROS_MKSU_${{ env.KSUVER }}
+         path: ./AnyKernel3/*
