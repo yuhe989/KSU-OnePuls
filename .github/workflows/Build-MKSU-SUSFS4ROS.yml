@@ -89,18 +89,18 @@ jobs:
            cp ./kernel_patches/69_hide_stuff.patch ./common
            cp ./susfs4ksu/kernel_patches/fs/* common/fs/
            cp ./susfs4ksu/kernel_patches/include/linux/* common/include/linux/
-           cd KernelSU
-           wget https://github.com/ShirkNeko/KernelSU/blob/susfs/mksu_susfs_fix.patch
+           #cd KernelSU
+           #wget https://github.com/ShirkNeko/KernelSU/blob/susfs/mksu_susfs_fix.patch
 
            # Apply patches
-           #cd KernelSU
+           cd KernelSU
            patch -p1 --forward < 10_enable_susfs_for_ksu.patch || true
            cd ../common
            patch -p1 < 50_add_susfs_in_gki-android12-5.10.patch || true
            patch -p1 -F 3 < 69_hide_stuff.patch
            cd ../KernelSU
            patch -p1 --forward < mksu_susfs_fix.patch || true
-           curl -LSs "https://raw.githubusercontent.com/ShirkNeko/KernelSU/refs/heads/susfs/mksu_susfs_vfs_fix.sh" | bash
+           bash mksu_susfs_vfs_fix.sh
            
       - name: Apply new hook and add configuration
         if: github.event.inputs.NEW-HOOK_ENABLED == 'true'
