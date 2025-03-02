@@ -69,7 +69,8 @@ jobs:
       - name: Set up MKSU
         run: |
          cd kernel_workspace
-         curl -LSs "https://raw.githubusercontent.com/5ec1cff/KernelSU/refs/heads/main/kernel/setup.sh" | bash
+         #curl -LSs "https://raw.githubusercontent.com/5ec1cff/KernelSU/refs/heads/main/kernel/setup.sh" | bash
+         curl -LSs "https://raw.githubusercontent.com/ShirkNeko/KernelSU/susfs/kernel/setup.sh" | bash -s susfs
          cd KernelSU
          KSU_VERSION=$(expr $(/usr/bin/git rev-list --count HEAD) "+" 10200)
          echo "KSUVER=$KSU_VERSION" >> $GITHUB_ENV
