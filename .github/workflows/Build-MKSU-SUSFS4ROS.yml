@@ -80,8 +80,8 @@ jobs:
            cd kernel_workspace
            git clone https://gitlab.com/simonpunk/susfs4ksu.git -b gki-android12-5.10
            git clone https://github.com/TheWildJames/kernel_patches.git
-           #cp ./kernel_patches/mksu_susfs.patch ./KernelSU/
-           cp ./kernel_patches/fix.patch ./KernelSU/
+           #cp ./kernel_patches/mksu/mksu_susfs.patch ./KernelSU/
+           cp ./kernel_patches/mksu/fix.patch ./KernelSU/
            cp ./kernel_patches/hooks/new_hooks.patch ./common
            cp ./susfs4ksu/kernel_patches/50_add_susfs_in_gki-android12-5.10.patch ./common/
            cp ./susfs4ksu/kernel_patches/KernelSU/10_enable_susfs_for_ksu.patch ./KernelSU/
