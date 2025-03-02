@@ -1,4 +1,4 @@
-name: Build MKSU-SUSFS 4 ROS
+name: Build MKSUSKN-SUSFS 4 ROS
 on:
   workflow_dispatch:
     inputs:
