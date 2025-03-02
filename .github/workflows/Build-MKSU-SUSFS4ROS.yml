@@ -100,7 +100,6 @@ jobs:
            patch -p1 -F 3 < 69_hide_stuff.patch
            cd ../KernelSU
            patch -p1 --forward < mksu_susfs_fix.patch || true
-           bash mksu_susfs_vfs_fix.sh
            
       - name: Apply new hook and add configuration
         if: github.event.inputs.NEW-HOOK_ENABLED == 'true'
@@ -129,6 +128,11 @@ jobs:
             cd ./common
             patch -p1 -F 3 < new_hooks.patch
         
+      - name: Apply sh script
+        run: |
+            cd kernel_workspace/KernelSU
+            bash mksu_susfs_vfs_fix.sh
+
       - name: Build the Kernel
         run: |
             cd kernel_workspace
