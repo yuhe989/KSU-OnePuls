@@ -1,4 +1,4 @@
-name: Build MKSUSKN-SUSFS 4 ROS
+name: Build MKSU-SUSFS 4 ROS
 on:
   workflow_dispatch:
     inputs:
@@ -98,7 +98,8 @@ jobs:
            cd ../common
            patch -p1 < 50_add_susfs_in_gki-android12-5.10.patch || true
            cd ../KernelSU
-           patch -p1 --forward < mksu_susfs_fix.patch || true
+           patch -p1 --forward < mksu_susfs.patch || true
+           patch -p1 --forward < fix.patch || true
            cd ../common
            patch -p1 -F 3 < 69_hide_stuff.patch
            
@@ -129,10 +130,10 @@ jobs:
             cd ./common
             patch -p1 -F 3 < new_hooks.patch
         
-      - name: Apply sh script
-        run: |
-            cd kernel_workspace/KernelSU
-            bash mksu_susfs_vfs_fix.sh
+      #- name: Apply sh script
+        #run: |
+           # cd kernel_workspace/KernelSU
+           # bash mksu_susfs_vfs_fix.sh
 
       - name: Build the Kernel
         run: |
