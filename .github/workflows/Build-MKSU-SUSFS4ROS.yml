@@ -100,7 +100,7 @@ jobs:
            cd ../KernelSU
            patch -p1 --forward < mksu_susfs.patch || true
            patch -p1 --forward < fix.patch || true
-           wget https://github.com/TanakaLun/Action-Kernel/blob/main/mksu_susfs_vfs_fix.sh
+           curl -O https://raw.githubusercontent.com/TanakaLun/Action-Kernel/refs/heads/main/mksu_susfs_vfs_fix.sh
            bash mksu_susfs_vfs_fix.sh
            cd ../common
            patch -p1 -F 3 < 69_hide_stuff.patch
