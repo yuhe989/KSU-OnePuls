@@ -52,15 +52,8 @@ jobs:
          curl https://storage.googleapis.com/git-repo-downloads/repo > ~/repo
          chmod a+x ~/repo
          sudo mv ~/repo /usr/local/bin/repo
-
-      # - name: Initialize repo and sync 4 1+A3P
-        # if: ${{ github.event.inputs.model == '1+Ace3Pro' }}
-        # run: |
-         # mkdir kernel_workspace && cd kernel_workspace
-         # repo init -u https://github.com/OnePlusOSS/kernel_manifest.git -b refs/heads/oneplus/sm8650 -m oneplus_ace3_pro_v.xml --depth=1
-         # repo sync
          
-      - name: Initialize repo 和 sync
+      - name: Initialize repo and sync
         run: |
          mkdir kernel_workspace && cd kernel_workspace
          repo init -u https://github.com/OnePlusOSS/kernel_manifest.git -b refs/heads/oneplus/sm8650 -m ${{ github.event.inputs.MODEL }}.xml --depth=1
@@ -115,10 +108,7 @@ jobs:
       - name: Build kernel
         run: |
          cd kernel_workspace
-         export LTO=thin
-         ./kernel_platform/build_with_bazel.py \
-            -t pineapple \
-            gki \
+         LTO=thin ./kernel_platform/build_with_bazel.py -t pineapple gki
                 
       - name: Make AnyKernel3
         run: |
