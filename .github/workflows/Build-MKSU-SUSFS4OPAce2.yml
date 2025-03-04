@@ -54,40 +54,68 @@ jobs:
          echo "KSUVER=$KSU_VERSION" >> $GITHUB_ENV
          sed -i "s/DKSU_VERSION=16/DKSU_VERSION=${KSU_VERSION}/" kernel/Makefile
         
-      - name: Set up susfs
+      - name: Set up SUSFS
         run: |
-           cd kernel_workspace           
+           cd kernel_workspace/kernel_platform
            git clone https://gitlab.com/simonpunk/susfs4ksu.git -b gki-android12-5.10
-           git clone https://github.com/WildPlusKernel/kernel_patches.git
-           cd kernel_platform
-           cp ../susfs4ksu/kernel_patches/KernelSU/10_enable_susfs_for_ksu.patch ./KernelSU/
-           cp ../kernel_patches/mksu_susfs.patch ./KernelSU/
-           cp ../kernel_patches/fix.patch ./KernelSU/
-           cp ../kernel_patches/new_hooks.patch ./common
-           cp ../kernel_patches/69_hide_stuff.patch ./common
-           cp ../susfs4ksu/kernel_patches/50_add_susfs_in_gki-android12-5.10.patch ./common/
-           cp ../susfs4ksu/kernel_patches/fs/* ./common/fs/
-           cp ../susfs4ksu/kernel_patches/include/linux/* ./common/include/linux/
-
+           git clone https://github.com/TheWildJames/kernel_patches.git
+           cp ./kernel_patches/mksu/mksu_susfs.patch ./KernelSU/
+           cp ./kernel_patches/mksu/fix.patch ./KernelSU/
+           cp ./kernel_patches/hooks/new_hooks.patch ./common
+           cp ./susfs4ksu/kernel_patches/50_add_susfs_in_gki-android12-5.10.patch ./common/
+           cp ./susfs4ksu/kernel_patches/KernelSU/10_enable_susfs_for_ksu.patch ./KernelSU/
+           cp ./kernel_patches/69_hide_stuff.patch ./common
+           cp ./susfs4ksu/kernel_patches/fs/* common/fs/
+           cp ./susfs4ksu/kernel_patches/include/linux/* common/include/linux/
+           
            # Apply patches
-           cd ./KernelSU
+           cd KernelSU
            patch -p1 --forward < 10_enable_susfs_for_ksu.patch || true
-           patch -p1 --forward < mksu_susfs.patch || true
-           patch -p1 --forward < fix.patch || true
            cd ../common
            patch -p1 < 50_add_susfs_in_gki-android12-5.10.patch || true
-           patch -p1 -F 3 < new_hooks.patch
-           #patch -p1 -F 3 < 69_hide_stuff.patch
+           cd ../KernelSU
+           patch -p1 --forward < mksu_susfs.patch || true
+           patch -p1 --forward < fix.patch || true
+           curl -O https://raw.githubusercontent.com/TanakaLun/Action-Kernel/refs/heads/main/vfs_fix.patch
+           #curl -O https://raw.githubusercontent.com/ShirkNeko/KernelSU/16f934f4aaa8301939d73f969a421e90b2e92c8e/mksu_susfs_vfs_fix.sh
+           patch -p1 --forward < vfs_fix.patch || true
+           cd ../common
+           patch -p1 -F 3 < 69_hide_stuff.patch
            git add -A && git commit -a -m "BUILD Kernel"
            cd ..
            cd ./msm-kernel && git add -A && git commit -a -m "BUILD Kernel"
            cd ..
+           
+      - name: Apply new hook and add configuration
+        run: |
+            cd kernel_workspace/kernel_platform
+            echo "CONFIG_KSU=y" >> ./common/arch/arm64/configs/gki_defconfig
+            echo "CONFIG_KSU_WITH_KPROBES=n" >> ./common/arch/arm64/configs/gki_defconfig
+            echo "CONFIG_KSU_SUSFS=y" >> ./common/arch/arm64/configs/gki_defconfig
+            echo "CONFIG_KSU_SUSFS_HAS_MAGIC_MOUNT=y" >> ./common/arch/arm64/configs/gki_defconfig
+            echo "CONFIG_KSU_SUSFS_SUS_PATH=y" >> ./common/arch/arm64/configs/gki_defconfig
+            echo "CONFIG_KSU_SUSFS_SUS_MOUNT=y" >> ./common/arch/arm64/configs/gki_defconfig
+            echo "CONFIG_KSU_SUSFS_AUTO_ADD_SUS_KSU_DEFAULT_MOUNT=y" >> ./common/arch/arm64/configs/gki_defconfig
+            echo "CONFIG_KSU_SUSFS_AUTO_ADD_SUS_BIND_MOUNT=y" >> ./common/arch/arm64/configs/gki_defconfig
+            echo "CONFIG_KSU_SUSFS_SUS_KSTAT=y" >> ./common/arch/arm64/configs/gki_defconfig
+            echo "CONFIG_KSU_SUSFS_SUS_OVERLAYFS=n" >> ./common/arch/arm64/configs/gki_defconfig
+            echo "CONFIG_KSU_SUSFS_TRY_UMOUNT=y" >> ./common/arch/arm64/configs/gki_defconfig
+            echo "CONFIG_KSU_SUSFS_AUTO_ADD_TRY_UMOUNT_FOR_BIND_MOUNT=y" >> ./common/arch/arm64/configs/gki_defconfig
+            echo "CONFIG_KSU_SUSFS_SPOOF_UNAME=y" >> ./common/arch/arm64/configs/gki_defconfig
+            echo "CONFIG_KSU_SUSFS_ENABLE_LOG=y" >> ./common/arch/arm64/configs/gki_defconfig
+            echo "CONFIG_KSU_SUSFS_HIDE_KSU_SUSFS_SYMBOLS=y" >> ./common/arch/arm64/configs/gki_defconfig
+            echo "CONFIG_KSU_SUSFS_SPOOF_CMDLINE_OR_BOOTCONFIG=y" >> ./common/arch/arm64/configs/gki_defconfig
+            echo "CONFIG_KSU_SUSFS_OPEN_REDIRECT=y" >> ./common/arch/arm64/configs/gki_defconfig
+            echo "CONFIG_KSU_SUSFS_SUS_SU=n" >> ./common/arch/arm64/configs/gki_defconfig
+            sed -i '2s/check_defconfig//' ./common/build.config.gki
+            # Apply New Hook Patch
+            cd ./common
+            patch -p1 -F 3 < new_hooks.patch
          
       - name: Build kernel
         run: |
          cd kernel_workspace
-         export LTO=thin
-         ./kernel_platform/oplus/build/oplus_build_kernel.sh waipio gki
+         LTO=thin ./kernel_platform/oplus/build/oplus_build_kernel.sh waipio gki
          
       - name: Make AnyKernel3
         run: |
