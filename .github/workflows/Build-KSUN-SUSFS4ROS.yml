@@ -72,7 +72,6 @@ jobs:
       - name: Set up susfs
         run: |
            cd kernel_workspace
-           ls
            git clone https://gitlab.com/simonpunk/susfs4ksu.git -b gki-android12-5.10
            git clone https://github.com/TheWildJames/kernel_patches.git
            cp ./kernel_patches/next/0001-kernel-patch-susfs-v1.5.5-to-KernelSU-Next-v1.0.5.patch KernelSU-Next/
