@@ -132,6 +132,7 @@ jobs:
            git clone https://gitlab.com/simonpunk/susfs4ksu.git -b gki-android${{ github.event.inputs.ANDROID_VERSION }}-${{ github.event.inputs.KERNEL_VERSION }}
            git clone https://github.com/TanakaLun/kernel_patches4mksu.git
            cd kernel_platform
+           cp ../susfs4ksu/kernel_patches/50_add_susfs_in_gki-${{ github.event.inputs.ANDROID_VERSION }}-${{ github.event.inputs.KERNEL_VERSION }}.patch ./common/
            cp ../susfs4ksu/kernel_patches/fs/* ./common/fs/
            cp ../susfs4ksu/kernel_patches/include/linux/* ./common/include/linux/
            # Apply patches
@@ -227,17 +228,6 @@ jobs:
         run: |
          cd kernel_workspace
          LTO=thin ./kernel_platform/oplus/build/oplus_build_kernel.sh ${{ github.event.inputs.CPUD }} gki
-         GENERATED_DEFCONFIG="./kernel_platform/out/msm-${{ github.event.inputs.CPUD }}-${{ github.event.inputs.CPUD }}-gki/gki_kernel/common/defconfig"
-            if [ -f "$GENERATED_DEFCONFIG" ]; then
-              echo "Appending SUSFS config to generated defconfig..."
-              echo "CONFIG_KSU=y" >> "$GENERATED_DEFCONFIG"
-              echo "CONFIG_KSU_WITH_KPROBES=n" >> "$GENERATED_DEFCONFIG"
-              echo "CONFIG_KSU_SUSFS=y" >> "$GENERATED_DEFCONFIG"
-              echo "CONFIG_KSU_SUSFS_SUS_SU=n" >> "$GENERATED_DEFCONFIG"
-            else
-              echo "ERROR: Generated defconfig not found at $GENERATED_DEFCONFIG"
-              exit 1
-            fi
                 
       - name: Make AnyKernel3
         run: |
