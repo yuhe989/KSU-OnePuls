@@ -36,7 +36,7 @@ on:
         type: choice
         options:
           - MKSU
-          - Next
+          - KSUN
       SUSFS_ENABLED:
         description: "实验性SUSFS配置"
         required: true
@@ -64,15 +64,6 @@ jobs:
          git config --global user.name "build"
          git config --global user.email "3436378798@qq.com"
          
-      - name: Create GitHub Release
-        uses: softprops/action-gh-release@v1
-        with:
-          tag_name: ${{ github.event.inputs.KSU_BRANCH }}-SUSFS
-          prerelease: true
-          name: ${{ env.RELEASE_NAME }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.TOKEN }}
-          
       - name: Output build information
         run: |
          echo "机型：${{ github.event.inputs.FEIL }} KSU分支：${{ github.event.inputs.KSU_BRANCH }}"
@@ -118,7 +109,7 @@ jobs:
          sed -i "s/DKSU_VERSION=16/DKSU_VERSION=${KSU_VERSION}/" kernel/Makefile
          
       - name: Add KernelSU-Next
-        if: ${{ github.event.inputs.KSU_BRANCH == 'Next' }}
+        if: ${{ github.event.inputs.KSU_BRANCH == 'KSUN' }}
         run: |
           cd kernel_workspace/kernel_platform
           curl -LSs "https://raw.githubusercontent.com/KernelSU-Next/KernelSU-Next/next/kernel/setup.sh" | bash
@@ -137,7 +128,7 @@ jobs:
            cp ../susfs4ksu/kernel_patches/fs/* ./common/fs/
            cp ../susfs4ksu/kernel_patches/include/linux/* ./common/include/linux/
            # Apply patches
-           if [ "${{ inputs.KSU_BRANCH }}" == "Next" ]; then
+           if [ "${{ inputs.KSU_BRANCH }}" == "KSUN" ]; then
              echo "Applying SUSFS patches for KernelSU-Next..."
              cd ./KernelSU-Next
              cp ../../kernel_patches4mksu/next/0001-kernel-patch-susfs-v1.5.5-to-KernelSU-Next-v1.0.5.patch ./
@@ -252,16 +243,24 @@ jobs:
         with:
          name: ${{ github.event.inputs.KSU_BRANCH }} _${{ github.event.inputs.FEIL }}_${{ env.KSUVER }}
          path: ./AnyKernel3/*
-
-      - name: Upload Release
+         
+      - name: Download Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: ./downloaded-artifacts
+          
+      - name: Upload Release Assets Dynamically
         run: |
-          ZIP_NAME="${{ github.event.inputs.KSU_BRANCH }}_${{ github.event.inputs.FEIL }}_${{ env.KSUVER }}.zip"
-          zip -r $ZIP_NAME ./AnyKernel3/*
-          if [ ! -f "$ZIP_NAME" ]; then
-            echo "ERROR: ZIP file not created!"
-            exit 1
-          fi
-          export GIT_DISCOVERY_ACROSS_FILESYSTEM=1
-          gh release upload ${{ github.event.inputs.KSU_BRANCH }}-SUSFS $ZIP_NAME
+          # Loop through all files in the downloaded-artifacts directory
+          for file in ./downloaded-artifacts/*; do
+              # Skip directories
+              if [ -d "$file" ]; then
+                  continue
+              fi
+
+              # Upload the file to the GitHub release
+              echo "Uploading $file..."
+              gh release upload ${{ github.event.inputs.KSU_BRANCH }}-SUSFS 
+          done
         env:
-          GITHUB_TOKEN: ${{ secrets.TOKEN }}
+            GITHUB_TOKEN: ${{ secrets.TOKEN }}
