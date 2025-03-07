@@ -17,7 +17,7 @@ on:
       KERNEL_VERSION:
         description: "内核版本"
         required: true
-        default: '5.1'
+        default: '5.10'
       FEIL:
         description: "机型/Model"
         required: true
