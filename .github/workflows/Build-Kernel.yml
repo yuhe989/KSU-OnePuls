@@ -252,7 +252,7 @@ jobs:
       - name: Upload AnyKernel3
         uses: actions/upload-artifact@v4
         with:
-         name: ${{ github.event.inputs.CPUD }} _${{ github.event.inputs.FEIL }}_${{ env.KSUVER }}
+         name: ${{ github.event.inputs.KSU_BRANCH }} _${{ github.event.inputs.FEIL }}_${{ env.KSUVER }}
          path: ./AnyKernel3/*
           
       - name: Upload Release
@@ -260,4 +260,4 @@ jobs:
           zip ${{ github.event.inputs.KSU_BRANCH }}_${{ github.event.inputs.FEIL }}_${{ env.KSUVER }}.zip ./AnyKernel3/*
           gh release upload ${{ github.event.inputs.KSU_BRANCH }}-SUSFS ${{ github.event.inputs.KSU_BRANCH }}_${{ github.event.inputs.FEIL }}_${{ env.KSUVER }}.zip
         env:
-          GITHUB_TOKEN: ${{ secrets.TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
