@@ -102,7 +102,7 @@ jobs:
          sed -i '$s|echo "\$res"|echo "$res-Mortis"|' kernel_platform/msm-kernel/scripts/setlocalversion
          
       - name: Add MKSU
-        if: ${{ github.event.inputs.kernelsu_variant == 'MKSU' }}
+        if: ${{ github.event.inputs.KSU_BRANCH == 'MKSU' }}
         run: |
          cd kernel_workspace/kernel_platform
          curl -LSs "https://raw.githubusercontent.com/5ec1cff/KernelSU/refs/heads/main/kernel/setup.sh" | bash
@@ -113,7 +113,7 @@ jobs:
          sed -i "s/DKSU_VERSION=16/DKSU_VERSION=${KSU_VERSION}/" kernel/Makefile
          
       - name: Add KernelSU-Next
-        if: ${{ github.event.inputs.kernelsu_variant == 'Next' }}
+        if: ${{ github.event.inputs.KSU_BRANCH == 'Next' }}
         run: |
           cd kernel_workspace/kernel_platform
           curl -LSs "https://raw.githubusercontent.com/rifsxd/KernelSU-Next/next/kernel/setup.sh" | bash next
@@ -131,12 +131,12 @@ jobs:
            cp ../susfs4ksu/kernel_patches/fs/* ./common/fs/
            cp ../susfs4ksu/kernel_patches/include/linux/* ./common/include/linux/
            # Apply patches
-           if [ "${{ inputs.kernelsu_variant }}" == "Next" ]; then
+           if [ "${{ inputs.KSU_BRANCH }}" == "Next" ]; then
              echo "Applying SUSFS patches for KernelSU-Next..."
              cd ./KernelSU-Next
              cp ../../kernel_patches4mksu/next/0001-kernel-patch-susfs-v1.5.5-to-KernelSU-Next-v1.0.5.patch ./
              patch -p1 --forward < 0001-kernel-patch-susfs-v1.5.5-to-KernelSU-Next-v1.0.5.patch || true
-           elif [ "${{ inputs.kernelsu_variant }}" == "MKSU" ]; then
+           elif [ "${{ inputs.KSU_BRANCH }}" == "MKSU" ]; then
              echo "Applying SUSFS patches for MKSU..."
              cd ./KernelSU
              cp ../../susfs4ksu/kernel_patches/KernelSU/10_enable_susfs_for_ksu.patch ./
@@ -248,7 +248,7 @@ jobs:
           
       - name: Upload Release
         run: |
-           zip ${{ github.event.inputs.KSU_BRANCH }}_${{ github.event.inputs.FEIL }}_${{ env.KSUVER }}.zip ./AnyKernel3/*
-           gh release upload ${{ github.event.inputs.KSU_BRANCH }}_${{ github.event.inputs.FEIL }}_${{ env.KSUVER }}.zip
+          zip ${{ github.event.inputs.KSU_BRANCH }}_${{ github.event.inputs.FEIL }}_${{ env.KSUVER }}.zip ./AnyKernel3/*
+          gh release upload ${{ github.event.inputs.KSU_BRANCH }}-SUSFS ${{ github.event.inputs.KSU_BRANCH }}_${{ github.event.inputs.FEIL }}_${{ env.KSUVER }}.zip
         env:
-           GITHUB_TOKEN: ${{ secrets.TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
