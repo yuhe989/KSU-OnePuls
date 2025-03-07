@@ -143,11 +143,11 @@ jobs:
              patch -p1 --forward < 10_enable_susfs_for_ksu.patch || true
             
              echo "Applying MKSU specific SUSFS patch..."
-             cp ../../kernel_patches4mksu/mksu/mksu_susfs.patch ../KernelSU/
+             cp ../../kernel_patches4mksu/mksu/mksu_susfs.patch ./
              patch -p1 < mksu_susfs.patch
-             cp ../../kernel_patches4mksu/mksu/fix.patch ./KernelSU/
+             cp ../../kernel_patches4mksu/mksu/fix.patch ./
              patch -p1 < fix.patch
-             cp ../../kernel_patches4mksu/mksu/vfs_fix.patch ./KernelSU/
+             cp ../../kernel_patches4mksu/mksu/vfs_fix.patch ./
              patch -p1 < vfs_fix.patch
            else
              echo "Invalid KernelSU variant selected!"
