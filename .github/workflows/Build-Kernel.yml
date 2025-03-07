@@ -252,10 +252,16 @@ jobs:
         with:
          name: ${{ github.event.inputs.KSU_BRANCH }} _${{ github.event.inputs.FEIL }}_${{ env.KSUVER }}
          path: ./AnyKernel3/*
-          
+
       - name: Upload Release
         run: |
-          zip ${{ github.event.inputs.KSU_BRANCH }}_${{ github.event.inputs.FEIL }}_${{ env.KSUVER }}.zip ./AnyKernel3/*
-          gh release upload ${{ github.event.inputs.KSU_BRANCH }}-SUSFS ${{ github.event.inputs.KSU_BRANCH }}_${{ github.event.inputs.FEIL }}_${{ env.KSUVER }}.zip
+          ZIP_NAME="${{ github.event.inputs.KSU_BRANCH }}_${{ github.event.inputs.FEIL }}_${{ env.KSUVER }}.zip"
+          zip -r $ZIP_NAME ./AnyKernel3/*
+          if [ ! -f "$ZIP_NAME" ]; then
+            echo "ERROR: ZIP file not created!"
+            exit 1
+          fi
+          export GIT_DISCOVERY_ACROSS_FILESYSTEM=1
+          gh release upload ${{ github.event.inputs.KSU_BRANCH }}-SUSFS $ZIP_NAME
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
