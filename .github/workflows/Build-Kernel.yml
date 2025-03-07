@@ -142,13 +142,17 @@ jobs:
              cp ../../susfs4ksu/kernel_patches/KernelSU/10_enable_susfs_for_ksu.patch ./
              patch -p1 --forward < 10_enable_susfs_for_ksu.patch || true
             
-            echo "Applying MKSU specific SUSFS patch..."
-            cp ../../kernel_patches4mksu/mksu/mksu_susfs.patch ../KernelSU/
-            patch -p1 < mksu_susfs.patch
-            cp ../../kernel_patches4mksu/mksu/fix.patch ./KernelSU/
-            patch -p1 < fix.patch
-            cp ../../kernel_patches4mksu/mksu/vfs_fix.patch ./KernelSU/
-            patch -p1 < vfs_fix.patch
+             echo "Applying MKSU specific SUSFS patch..."
+             cp ../../kernel_patches4mksu/mksu/mksu_susfs.patch ../KernelSU/
+             patch -p1 < mksu_susfs.patch
+             cp ../../kernel_patches4mksu/mksu/fix.patch ./KernelSU/
+             patch -p1 < fix.patch
+             cp ../../kernel_patches4mksu/mksu/vfs_fix.patch ./KernelSU/
+             patch -p1 < vfs_fix.patch
+           else
+             echo "Invalid KernelSU variant selected!"
+             exit 1
+           fi
             cd ../common
             patch -p1 < 50_add_susfs_in_gki-android${{ github.event.inputs.ANDROID_VERSION }}-${{ github.event.inputs.KERNEL_VERSION }}.patch || true           
             git add -A && git commit -a -m "BUILD Kernel"
