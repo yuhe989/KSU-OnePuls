@@ -131,35 +131,30 @@ jobs:
            cp ../susfs4ksu/kernel_patches/fs/* ./common/fs/
            cp ../susfs4ksu/kernel_patches/include/linux/* ./common/include/linux/
            # Apply patches
-          if [ "${{ inputs.kernelsu_variant }}" == "Next" ]; then
-            echo "Applying SUSFS patches for KernelSU-Next..."
-            cd ./KernelSU-Next
-            cp ../../kernel_patches4mksu/next/0001-kernel-patch-susfs-v1.5.5-to-KernelSU-Next-v1.0.5.patch ./
-            patch -p1 --forward < 0001-kernel-patch-susfs-v1.5.5-to-KernelSU-Next-v1.0.5.patch || true
-          elif [ "${{ inputs.kernelsu_variant }}" == "MKSU" ]; then
-            echo "Applying SUSFS patches for MKSU..."
-            cd ./KernelSU
-            cp ../../susfs4ksu/kernel_patches4mksu/KernelSU/10_enable_susfs_for_ksu.patch ./
-            patch -p1 --forward < 10_enable_susfs_for_ksu.patch || true
+           if [ "${{ inputs.kernelsu_variant }}" == "Next" ]; then
+             echo "Applying SUSFS patches for KernelSU-Next..."
+             cd ./KernelSU-Next
+             cp ../../kernel_patches4mksu/next/0001-kernel-patch-susfs-v1.5.5-to-KernelSU-Next-v1.0.5.patch ./
+             patch -p1 --forward < 0001-kernel-patch-susfs-v1.5.5-to-KernelSU-Next-v1.0.5.patch || true
+           elif [ "${{ inputs.kernelsu_variant }}" == "MKSU" ]; then
+             echo "Applying SUSFS patches for MKSU..."
+             cd ./KernelSU
+             cp ../../susfs4ksu/kernel_patches/KernelSU/10_enable_susfs_for_ksu.patch ./
+             patch -p1 --forward < 10_enable_susfs_for_ksu.patch || true
             
             echo "Applying MKSU specific SUSFS patch..."
-            cp ../../kernel_patches4mksu/mksu/${{ github.event.inputs.KSU_BRANCH }}_susfs.patch ../KernelSU/
-            patch -p1 < ${{ github.event.inputs.KSU_BRANCH }}_susfs.patch
+            cp ../../kernel_patches4mksu/mksu/mksu_susfs.patch ../KernelSU/
+            patch -p1 < mksu_susfs.patch
             cp ../../kernel_patches4mksu/mksu/fix.patch ./KernelSU/
             patch -p1 < fix.patch
             cp ../../kernel_patches4mksu/mksu/vfs_fix.patch ./KernelSU/
             patch -p1 < vfs_fix.patch
-            
-          else
-            echo "Invalid KernelSU variant selected!"
-            exit 1
-          fi
-           cd ../common
-           patch -p1 < 50_add_susfs_in_gki-android${{ github.event.inputs.ANDROID_VERSION }}-${{ github.event.inputs.KERNEL_VERSION }}.patch || true           
-           git add -A && git commit -a -m "BUILD Kernel"
-           cd ..
-           cd ./msm-kernel && git add -A && git commit -a -m "BUILD Kernel"
-           cd ..
+            cd ../common
+            patch -p1 < 50_add_susfs_in_gki-android${{ github.event.inputs.ANDROID_VERSION }}-${{ github.event.inputs.KERNEL_VERSION }}.patch || true           
+            git add -A && git commit -a -m "BUILD Kernel"
+            cd ..
+            cd ./msm-kernel && git add -A && git commit -a -m "BUILD Kernel"
+            cd ..
            
       - name: Apply Hide Stuff Patches
         run: |
@@ -217,7 +212,7 @@ jobs:
         if: github.event.inputs.CPU == 'sm8650' 
         run: |
          cd kernel_workspace
-         ./kernel_platform/build_with_bazel.py -t ${{ github.event.inputs.CPUD }} gki
+         LTO=thin ./kernel_platform/build_with_bazel.py -t ${{ github.event.inputs.CPUD }} gki
           
       - name: Fallback build kernel
         if: github.event.inputs.CPU != 'sm8650' 
