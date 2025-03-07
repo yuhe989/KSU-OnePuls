@@ -141,9 +141,9 @@ jobs:
             
              echo "Applying MKSU specific SUSFS patch..."
              cp ../../kernel_patches4mksu/mksu/mksu_susfs.patch ./
-             patch -p1 < mksu_susfs.patch
+             patch -p1 < mksu_susfs.patch || true
              cp ../../kernel_patches4mksu/mksu/fix.patch ./
-             patch -p1 < fix.patch
+             patch -p1 < fix.patch || true
              cp ../../kernel_patches4mksu/mksu/vfs_fix.patch ./
              patch -p1 < vfs_fix.patch
            else
