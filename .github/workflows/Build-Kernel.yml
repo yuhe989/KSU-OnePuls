@@ -99,6 +99,7 @@ jobs:
 
       - name: Add KernelSU
         run: |
+          cd kernel_workspace/kernel_platform
           if [ "${{ github.event.inputs.KSU_BRANCH }}" == "Next" ]; then
             echo "Adding KernelSU Next..."
             curl -LSs "https://raw.githubusercontent.com/KernelSU-Next/KernelSU-Next/next/kernel/setup.sh" | bash
