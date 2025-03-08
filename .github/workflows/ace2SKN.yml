@@ -1,31 +1,31 @@
-name: Build OnePlus_Kernel
+name: CeShi
 on:
   workflow_dispatch:
     inputs:
       CPU:
         description: "分支"
         required: true
-        default: 'sm8475'
+        default: 'sm7675'
       FEIL:
         description: "配置文件"
         required: true
-        default: 'oneplus_ace2_v'
+        default: 'oneplus_ace_3v_v'
       CPUD:
         description: "处理器代号"
         required: true
-        default: 'waipio'
+        default: 'pineapple'
       ANDROID_VERSION:
         description: "内核安卓版本"
         required: true
-        default: 'android12'
+        default: 'android14'
       KERNEL_VERSION:
         description: "内核版本"
         required: true
-        default: '5.10'
+        default: '6.1'
       KERNEL_NAME:
         description: "修改内核名称"
         required: true
-        default: '-android12-9-o-g1132d864665d'
+        default: '-android14-11-o-g1132d864665d'
       kernelsu_variant:
         description: "选择 KSU"
         required: true
@@ -64,13 +64,13 @@ jobs:
       - name: Maximize build space
         uses: easimon/maximize-build-space@master
         with:
-          root-reserve-mb: 8192
-          temp-reserve-mb: 2048
-          remove-dotnet: 'true'
-          remove-android: 'true'
-          remove-haskell: 'true'
-          remove-codeql: 'true'
-
+         root-reserve-mb: 24576
+         temp-reserve-mb: 8192
+         swap-size-mb: 16384
+         remove-dotnet: 'true'
+         remove-android: 'true'
+         remove-haskell: 'true'
+         remove-codeql: 'true'
       - name: Configure Git
         run: |
          git config --global user.name "ychenxuan"
@@ -190,7 +190,7 @@ jobs:
         run: |
          cd kernel_workspace/kernel_platform
          sed -i '$s|echo "\$res"|echo "\${{ github.event.inputs.KERNEL_NAME }}"|' ./common/scripts/setlocalversion
-         sed -i "/stable_scmversion_cmd/s/-maybe-dirty//g" ./build/kernel/kleaf/impl/stamp.bzl ||true
+         sed -i "/stable_scmversion_cmd/s/-maybe-dirty//g" ./build/kernel/kleaf/impl/stamp.bzl || true
   
       - name: Build kernel
         if: github.event.inputs.CPU == 'sm8650' 
@@ -208,8 +208,8 @@ jobs:
         run: |
          git clone https://github.com/Kernel-SU/AnyKernel3 --depth=1
          rm -rf ./AnyKernel3/.git
-         cp kernel_workspace/kernel_platform/out/msm-waipio-waipio-gki/dist/Image ./AnyKernel3/
-         cp kernel_workspace/kernel_platform/out/msm-waipio-waipio-gki/dist/Image ./kernel_workspace/kernel
+         cp kernel_workspace/kernel_platform/out/msm-kernel-${{ github.event.inputs.CPUD }}-gki/dist/Image ./AnyKernel3/
+         cp kernel_workspace/kernel_platform/out/msm-kernel-${{ github.event.inputs.CPUD }}-gki/dist/Image ./kernel_workspace/kernel
          
       - name: Upload AnyKernel3
         uses: actions/upload-artifact@v4
