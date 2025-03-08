@@ -211,12 +211,13 @@ jobs:
                               
       - name: Build kernel 
         run: |
-         cd kernel_workspace
-         #if [ -f "./kernel_workspace/kernel_platform/build_with_bazel.py" ]; then
-         if [ "${{ github.event.inputs.CPU }}" == "sm8650" ]; then
-          LTO=thin ./kernel_platform/build_with_bazel.py -t ${{ github.event.inputs.CPUD }} gki
+         cd kernel_workspace/kernel_platform
+         if [ -f "./build_with_bazel.py" ]; then
+         #if [ "${{ github.event.inputs.CPU }}" == "sm8650" ]; then
+          echo "build_with_bazel.py"
+          LTO=thin ./build_with_bazel.py -t ${{ github.event.inputs.CPUD }} gki
          else
-          LTO=thin ./kernel_platform/oplus/build/oplus_build_kernel.sh ${{ github.event.inputs.CPUD }} gki
+          LTO=thin ./oplus/build/oplus_build_kernel.sh ${{ github.event.inputs.CPUD }} gki
          fi
 
       - name: Make AnyKernel3
