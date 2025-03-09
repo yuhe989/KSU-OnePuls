@@ -1,7 +1,13 @@
-# 食用说明
-一加内核开源地址：[OnePlusOSS](https://github.com/OnePlusOSS/kernel_manifest)
-# 重要声明/Important Notice
-CN:鉴于KernelSU-Next作者的迷惑发言，现终止所有KernelSU-Next的GKI内核构建
+# 使用说明/Instructions
+从action/release中寻找与你机型匹配的ak3包并刷入
+Find the ak3 package that matches your model from action/release and flash it
 
-EN:In view of the confusing remarks made by the author of KernelSU-Next, all GKI kernel builds of KernelSU-Next are terminated
-![1000290451](https://github.com/user-attachments/assets/c770ac14-16b9-4ecf-876b-3ffa60a6f0f1)
+一加内核开源地址：[OnePlusOSS](https://github.com/OnePlusOSS/kernel_manifest)
+
+推荐的内核刷写工具/Recommended kernel flashing tools: [Horizon Kerenl Flasher](https://github.com/libxzr/HorizonKernelFlasher) 
+# 致谢名单/Credits
+项目/Program：[WildKernelPlus](https://github.com/WildPlusKernel) 
+[MKSU](https://github.com/5ec1cff/KernelSU)
+[susfs4ksu](https://gitlab.com/simonpunk/susfs4ksu)
+
+人员/staff：bbB猫 Ryhoaca
